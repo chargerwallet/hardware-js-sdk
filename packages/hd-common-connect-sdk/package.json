@@ -1,0 +1,29 @@
+{
+  "name": "@chargerwallet/hd-common-connect-sdk",
+  "version": "4.0.0",
+  "author": "ChargerWallet",
+  "homepage": "https://github.com/chargerwallet/hardware-js-sdk#readme",
+  "license": "ISC",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chargerwallet/hardware-js-sdk.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "dev": "rimraf dist && rollup -c ../../build/rollup.config.js -w",
+    "build": "rimraf dist && rollup -c ../../build/rollup.config.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "dependencies": {
+    "@chargerwallet/hd-core": "^4.0.0",
+    "@chargerwallet/hd-shared": "4.0.0",
+    "@chargerwallet/hd-transport-http": "4.0.0",
+    "@chargerwallet/hd-transport-lowlevel": "4.0.0",
+    "@chargerwallet/hd-transport-webusb": "4.0.0"
+  }
+}

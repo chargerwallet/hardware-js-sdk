@@ -1,0 +1,31 @@
+{
+  "name": "@chargerwallet/hd-transport-http",
+  "version": "4.0.0",
+  "description": "hardware http transport",
+  "author": "ChargerWallet",
+  "homepage": "https://github.com/chargerwallet/hardware-js-sdk#readme",
+  "license": "ISC",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chargerwallet/hardware-js-sdk.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "dev": "rimraf dist && rollup -c ../../build/rollup.config.js -w",
+    "build": "rimraf dist && rollup -c ../../build/rollup.config.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "bugs": {
+    "url": "https://github.com/chargerwallet/hardware-js-sdk/issues"
+  },
+  "dependencies": {
+    "@chargerwallet/hd-shared": "4.0.0",
+    "@chargerwallet/hd-transport": "4.0.0",
+    "axios": "^0.27.2"
+  }
+}

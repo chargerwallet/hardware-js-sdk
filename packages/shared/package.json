@@ -1,0 +1,28 @@
+{
+  "name": "@chargerwallet/hd-shared",
+  "version": "4.0.0",
+  "description": "Hardware SDK's shared tool library",
+  "keywords": [
+    "Hardware-SDK",
+    "shared",
+    "utils"
+  ],
+  "author": "Leon <lixiao.dev@gmail.com>",
+  "homepage": "https://github.com/chargerwallet/hardware-js-sdk#readme",
+  "license": "ISC",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chargerwallet/hardware-js-sdk.git"
+  },
+  "scripts": {
+    "dev": "rimraf dist && rollup -c ../../build/rollup.config.js -w",
+    "build": "rimraf dist && rollup -c ../../build/rollup.config.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  }
+}

@@ -1,0 +1,81 @@
+import { UI_REQUEST } from '../../constants/ui-request';
+import { serializedPath, validatePath } from '../helpers/pathUtils';
+import { BaseMethod } from '../BaseMethod';
+import { validateParams, validateResult } from '../helpers/paramsValidator';
+import { CosmosAddress, CosmosGetPublicKeyParams } from '../../types';
+
+export default class CosmosGetPublicKey extends BaseMethod<any> {
+  hasBundle = false;
+
+  init() {
+    this.checkDeviceId = true;
+    this.notAllowDeviceMode = [...this.notAllowDeviceMode, UI_REQUEST.INITIALIZE];
+
+    this.hasBundle = !!this.payload?.bundle;
+    const payload = this.hasBundle ? this.payload : { bundle: [this.payload] };
+
+    // check payload
+    validateParams(payload, [{ name: 'bundle', type: 'array' }]);
+
+    if (payload.bundle.length === 0) {
+      throw new Error('Bundle is empty');
+    }
+
+    // init params
+    this.params = [];
+    payload.bundle.forEach((batch: CosmosGetPublicKeyParams) => {
+      const addressN = validatePath(batch.path, 3);
+
+      validateParams(batch, [
+        { name: 'path', required: true },
+        { name: 'curve', type: 'string' },
+        { name: 'showOnChargerWallet', type: 'boolean' },
+      ]);
+
+      const showOnChargerWallet = batch.showOnChargerWallet ?? true;
+      const curveName = batch.curve ?? 'secp256k1';
+
+      if (curveName !== 'secp256k1') {
+        throw new Error('Curve name is not supported');
+      }
+
+      this.params.push({
+        address_n: addressN,
+        curve: curveName,
+        show_display: showOnChargerWallet,
+      });
+    });
+  }
+
+  getVersionRange() {
+    return {
+      model_mini: {
+        min: '2.10.0',
+      },
+      model_touch: {
+        min: '4.0.0',
+      },
+    };
+  }
+
+  async run() {
+    const res = await this.device.commands.typedCall('BatchGetPublickeys', 'EcdsaPublicKeys', {
+      paths: this.params,
+      ecdsa_curve_name: this.params[0].curve,
+    });
+
+    const responses: CosmosAddress[] = res.message.public_keys.map(
+      (publicKey: string, index: number) => ({
+        path: serializedPath((this.params as unknown as any[])[index].address_n),
+        pub: publicKey,
+        publicKey,
+      })
+    );
+
+    validateResult(responses, ['pub'], {
+      expectedLength: this.params.length,
+    });
+
+    return Promise.resolve(this.hasBundle ? responses : responses[0]);
+  }
+}
